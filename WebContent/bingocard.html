@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>BingoCard</title>
+		<meta charset="UTF-8">
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	</head>
+
+	<script type="text/javascript">
+		$(function() {
+
+			var ws = new WebSocket("ws://localhost:8080/BingoSample/wsservlet");
+			var vals; // ビンゴカードの数値を保管する
+			var ary; // class="card"のtd要素を保管する
+
+			$("#send").on("click", function() {
+
+				ary = document.getElementsByClassName("card");
+				vals = new Array(25);
+				for (var i = 0; i < 25; i++) {
+					vals[i] = ary[i].value;
+				}
+				var msg = { name : "player", values : vals };
+
+				ws.send(JSON.stringify(msg));
+
+			});
+
+			ws.onmessage = function(event) {
+
+				$("h1").html(event.data);
+
+				for (var i = 0; i < ary.length; i++) {
+					if (ary[i].value == event.data) {
+						var id = "#number" + i;
+						$(id).css("background", "red");
+						break;
+					}
+				}
+			}
+
+		});
+	</script>
+
+	<body>
+		<h1>BingoGame!</h1>
+		<form>
+		<table>
+			<tr>
+				<td><input type="text" class="card" id="number0"></td>
+				<td><input type="text" class="card" id="number1"></td>
+				<td><input type="text" class="card" id="number2"></td>
+				<td><input type="text" class="card" id="number3"></td>
+				<td><input type="text" class="card" id="number4"></td>
+			</tr>
+			<tr>
+				<td><input type="text" class="card" id="number5"></td>
+				<td><input type="text" class="card" id="number6"></td>
+				<td><input type="text" class="card" id="number7"></td>
+				<td><input type="text" class="card" id="number8"></td>
+				<td><input type="text" class="card" id="number9"></td>
+			</tr>
+			<tr>
+				<td><input type="text" class="card" id="number10"></td>
+				<td><input type="text" class="card" id="number11"></td>
+				<td><input type="text" class="card" id="number12"></td>
+				<td><input type="text" class="card" id="number13"></td>
+				<td><input type="text" class="card" id="number14"></td>
+			</tr>
+			<tr>
+				<td><input type="text" class="card" id="number15"></td>
+				<td><input type="text" class="card" id="number16"></td>
+				<td><input type="text" class="card" id="number17"></td>
+				<td><input type="text" class="card" id="number18"></td>
+				<td><input type="text" class="card" id="number19"></td>
+			</tr>
+			<tr>
+				<td><input type="text" class="card" id="number20"></td>
+				<td><input type="text" class="card" id="number21"></td>
+				<td><input type="text" class="card" id="number22"></td>
+				<td><input type="text" class="card" id="number23"></td>
+				<td><input type="text" class="card" id="number24"></td>
+			</tr>
+		</table>
+
+		<input type="button" id="send" value="Send">
+		</form>
+
+	</body>
+</head>
+
+<style>
+	h1 {
+		text-align: center;
+	}
+	table {
+		text-align: center;
+		margin: auto;
+	}
+	input.card {
+		text-align: center;
+		width: 2em;
+		height: 2em;
+		font-size: 30px;
+		border: 1px solid black;
+		background: #eee;
+	}
+	form {
+		text-align: center;
+	}
+</style>
