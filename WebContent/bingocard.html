@@ -27,8 +27,8 @@
 			});
 
 			ws.onmessage = function(event) {
-
-				$("h1").html(event.data);
+				var obj = JSON.parse(event.data);
+				$("h1").html(obj.num + ", " + obj.message);
 
 				for (var i = 0; i < ary.length; i++) {
 					if (ary[i].value == event.data) {
