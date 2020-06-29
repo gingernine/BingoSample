@@ -10,34 +10,44 @@
 		$(function() {
 
 			var ws = new WebSocket("ws://localhost:8080/BingoSample/wsservlet");
-			var vals; // ビンゴカードの数値を保管する
-			var ary; // class="card"のtd要素を保管する
+			var ary; // ビンゴカードのclass="card"の要素を保管する
+			var vals; //　ビンゴカードの数値を保管する
 
 			$("#send").on("click", function() {
 
 				ary = document.getElementsByClassName("card");
 				vals = new Array(25);
+
 				for (var i = 0; i < 25; i++) {
-					vals[i] = ary[i].value;
+					vals[i] = ary[i].value
 				}
-				var msg = { name : "player", values : vals };
+
+				msg = { values : vals };
 
 				ws.send(JSON.stringify(msg));
-
 			});
 
-			ws.onmessage = function(event) {
-				var obj = JSON.parse(event.data);
-				$("h1").html(obj.num + ", " + obj.message);
-
-				for (var i = 0; i < ary.length; i++) {
-					if (ary[i].value == event.data) {
-						var id = "#number" + i;
-						$(id).css("background", "red");
-						break;
-					}
+			$("#auto").on("click", function() {
+				// 1から75までの数値を入れた配列を作る
+				var numarray = new Array(75);
+				for (var i = 0; i < 75; i++) {
+					numarray[i] = i + 1;
 				}
-			}
+
+				// Fisher-Yates メソッドによって配列をシャッフルする
+				for (var i = numarray.length - 1; i > 0; i--) {
+					var r = Math.floor(Math.random() * (i + 1));
+					var tmp = numarray[i];
+					numarray[i] = numarray[r];
+					numarray[r] = tmp;
+				}
+
+				//配列のはじめの25要素をビンゴカードに割り当てる
+				for (var i = 0; i < 25; i++) {
+					var id = "#number" + i;
+					$(id).val(numarray[i]);
+				}
+			});
 
 		});
 	</script>
@@ -84,6 +94,7 @@
 		</table>
 
 		<input type="button" id="send" value="Send">
+		<input type="button" id="auto" value="Auto">
 		</form>
 
 	</body>

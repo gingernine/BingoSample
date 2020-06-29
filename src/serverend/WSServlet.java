@@ -26,7 +26,9 @@ public class WSServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			GetMessage gm = mapper.readValue(message, GetMessage.class);
-			System.out.println(gm.name + ", " + gm.values);
+			for (int i = 0; i < gm.values.length; i++) {
+				System.out.println(gm.values[i]);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
