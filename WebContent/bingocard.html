@@ -12,6 +12,7 @@
 			var ws = new WebSocket("ws://localhost:8080/BingoSample/wsservlet");
 			var ary; // ビンゴカードのclass="card"の要素を保管する
 			var vals; //　ビンゴカードの数値を保管する
+			var username; // ユーザーネームを保管する
 
 			$("#send").on("click", function() {
 
@@ -22,7 +23,9 @@
 					vals[i] = ary[i].value
 				}
 
-				msg = { values : vals };
+				username = $("#username").val();
+
+				var msg = { username : username, values : vals };
 
 				ws.send(JSON.stringify(msg));
 			});
@@ -55,6 +58,9 @@
 	<body>
 		<h1>BingoGame!</h1>
 		<form>
+
+		<input type="text" id="username">
+
 		<table>
 			<tr>
 				<td><input type="text" class="card" id="number0"></td>
